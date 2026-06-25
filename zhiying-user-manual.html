@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智剪 · 用户使用手册</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #3b82f6;
+    --primary-dark: #1d4ed8;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --accent: #06b6d4;
+    --sidebar-w: 280px;
+    --header-h: 64px;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    display: flex; align-items: center; padding: 0 32px;
+    box-shadow: 0 2px 12px rgba(37,99,235,.35);
+  }
+  .app-header .logo {
+    font-size: 22px; font-weight: 800; letter-spacing: 1px; margin-right: 12px;
+  }
+  .app-header .logo-sub { font-size: 13px; opacity: .85; font-weight: 400; }
+  .app-header .badge {
+    margin-left: 8px; background: rgba(255,255,255,.2); padding: 4px 14px;
+    border-radius: 20px; font-size: 12px; backdrop-filter: blur(4px);
+  }
+  /* ── Horizontal Nav Bar ── */
+  .header-nav {
+    display: flex; align-items: center; gap: 8px;
+    margin-left: 24px; list-style: none;
+  }
+  .header-nav a {
+    color: rgba(255,255,255,.9); text-decoration: none;
+    font-size: 14px; font-weight: 500; padding: 6px 16px;
+    border-radius: 20px; transition: all .25s;
+    background: rgba(255,255,255,.12);
+  }
+  .header-nav a:hover, .header-nav a.active {
+    background: rgba(255,255,255,.28); color: #fff;
+  }
+  html { scroll-behavior: smooth; }
+
+
+  /* ── Layout ── */
+  .layout { display: flex; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+
+  /* ── Sidebar TOC ── */
+  .toc-sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: var(--surface); border-right: 1px solid var(--border);
+    position: fixed; top: var(--header-h); bottom: 0; left: 0;
+    overflow-y: auto; padding: 24px 0;
+    scrollbar-width: thin; scrollbar-color: transparent transparent;
+  }
+  .toc-sidebar:hover { scrollbar-color: var(--border) transparent; }
+  .toc-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text-secondary); padding: 0 20px 16px;
+    border-bottom: 1px solid var(--border); margin-bottom: 12px;
+  }
+  .toc-list { list-style: none; }
+  .toc-list li > a {
+    display: block; padding: 8px 24px 8px 28px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 14px; transition: all .2s; border-left: 3px solid transparent;
+  }
+  .toc-list li > a:hover { color: var(--primary); background: #eff6ff; border-left-color: var(--primary-light); }
+  .toc-list li.active > a {
+    color: var(--primary); font-weight: 600; background: #eff6ff;
+    border-left-color: var(--primary);
+  }
+
+  /* Section group label in TOC */
+  .toc-group-label {
+    display: block; padding: 14px 24px 6px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8;
+    font-weight: 700;
+  }
+
+  /* ── Main Content ── */
+  .main-content {
+    flex: 1; margin-left: var(--sidebar-w); padding: 40px 56px;
+    max-width: 1100px;
+  }
+
+  /* ── Sections ── */
+  section { margin-bottom: 56px; scroll-margin-top: calc(var(--header-h) + 20px); }
+
+  /* Anchor target for h3 sub-sections (used by TOC) */
+  [id^="project-"]:target,
+  [id$="-create"]:target,
+  [id$="-plan"]:target,
+  [id$="-demand"]:target,
+  [id$="-script-task"]:target,
+  [id$="-material-knowledge"]:target {
+    scroll-margin-top: calc(var(--header-h) + 20px);
+  }
+
+  section h2 {
+    font-size: 28px; font-weight: 800; color: var(--text);
+    margin-bottom: 6px; padding-bottom: 10px;
+    border-bottom: 3px solid var(--primary);
+    display: inline-block;
+  }
+  section h2 .num {
+    display: inline-block; background: var(--primary); color: #fff;
+    width: 36px; height: 36px; line-height: 36px; text-align: center;
+    border-radius: 10px; font-size: 18px; margin-right: 12px; vertical-align: middle;
+  }
+  section h3 {
+    font-size: 19px; font-weight: 700; color: var(--text);
+    margin: 28px 0 12px; padding-left: 14px;
+    border-left: 4px solid var(--accent);
+  }
+  section p { color: var(--text-secondary); font-size: 15px; margin-bottom: 12px; }
+
+  /* Feature card */
+  .feature-card {
+    background: var(--surface); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+  .feature-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+
+  /* Screenshot container */
+  .img-group { margin: 20px 0; }
+  .screenshot {
+    width: 100%; border-radius: 8px; border: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(0,0,0,.08); transition: transform .25s, box-shadow .25s;
+    cursor: pointer; display: block;
+  }
+  .screenshot:hover {
+    transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  }
+  .img-caption {
+    font-size: 13px; color: #94a3b8; text-align: center;
+    margin-top: 8px; font-style: italic;
+  }
+
+  /* Grid for multiple images */
+  .img-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 20px 0; }
+  .img-grid .screenshot { width: 100%; }
+
+  /* Step list */
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li {
+    position: relative; padding: 14px 18px 14px 52px; margin-bottom: 10px;
+    background: linear-gradient(135deg, #f0f9ff, #fff); border-radius: 10px;
+    border: 1px solid #bae6fd; font-size: 15px; color: var(--text-secondary);
+  }
+  .steps li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px; line-height: 28px; text-align: center;
+    background: var(--primary); color: #fff; border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* Info table */
+  .info-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+  }
+  .info-table th {
+    background: #f1f5f9; padding: 10px 16px; text-align: left;
+    font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border);
+  }
+  .info-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+
+  /* Tag pills */
+  .tag {
+    display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px;
+    font-weight: 600; margin-right: 6px;
+  }
+  .tag-blue { background: #dbeafe; color: #1d4ed8; }
+  .tag-green { background: #dcfce7; color: #15803d; }
+  .tag-orange { background: #ffedd5; color: #c2410c; }
+  .tag-cyan { background: #cffafe; color: #0e7490; }
+  .tag-purple { background: #f3e8ff; color: #7c3aed; }
+
+  /* Tips / warning boxes */
+  .tip-box {
+    background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+    border-left: 4px solid #10b981; padding: 14px 20px; border-radius: 0 10px 10px 0;
+    margin: 16px 0; font-size: 14px; color: #047857;
+  }
+  .warn-box {
+    background: linear-gradient(135deg, #fef3c7, #fffbeb);
+    border-left: 4px solid #f59e0b; padding: 14px 20px; border-radius: 0 10px 10px 0;
+    margin: 16px 0; font-size: 14px; color: #b45309;
+  }
+
+  /* Back to top */
+  .back-top {
+    position: fixed; right: 32px; bottom: 32px; z-index: 200;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--primary); color: #fff; border: none;
+    cursor: pointer; font-size: 20px; box-shadow: 0 4px 14px rgba(37,99,235,.4);
+    display: none; align-items: center; justify-content: center;
+    transition: transform .2s;
+  }
+  .back-top:hover { transform: scale(1.1); }
+  .back-top.show { display: flex; }
+
+  /* Lightbox overlay */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center; cursor: pointer;
+  }
+  .lightbox.show { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+  .lightbox-close {
+    position: absolute; top: 24px; right: 30px; color: #fff; font-size: 32px;
+    cursor: pointer; opacity: .7; transition: opacity .2s;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .toc-sidebar { display: none; }
+    .main-content { margin-left: 0; padding: 28px 24px; }
+  }
+  @media (max-width: 640px) {
+    .img-grid { grid-template-columns: 1fr; }
+    section h2 { font-size: 22px; }
+  }
+
+  /* Hero banner */
+  .hero-banner {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb, #06b6d4);
+    color: #fff; border-radius: 16px; padding: 42px 36px; margin-bottom: 44px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero-banner::after {
+    content: ""; position: absolute; top: -50%; right: -20%;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: rgba(255,255,255,.07);
+  }
+  .hero-banner h1 { font-size: 36px; font-weight: 900; margin-bottom: 10px; position: relative; z-index: 1; }
+  .hero-banner p { color: rgba(255,255,255,.85); font-size: 16px; position: relative; z-index: 1; }
+  .hero-tags { margin-top: 18px; position: relative; z-index: 1; }
+  .hero-tags .tag { background: rgba(255,255,255,.2); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+
+  /* ── Case Works Gallery ── */
+  .case-filter-bar {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+  }
+  .case-filter-btn {
+    padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px;
+    background: var(--surface); color: var(--text-secondary);
+    font-size: 13px; cursor: pointer; transition: all .2s;
+  }
+  .case-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .case-filter-btn.active {
+    background: var(--primary); color: #fff; border-color: var(--primary);
+  }
+
+  .case-gallery-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px; margin-top: 8px;
+    align-items: start;
+  }
+  .case-gallery-card {
+    background: var(--surface); border-radius: var(--radius);
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    overflow: hidden; cursor: pointer; transition: transform .25s, box-shadow .25s;
+    display: flex; flex-direction: column;
+  }
+  .case-gallery-card:hover {
+    transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.12);
+  }
+  .case-card-thumb {
+    position: relative; width: 100%;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb); overflow: hidden;
+  }
+  .case-card-thumb img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .case-card-thumb.no-thumb { background: linear-gradient(135deg, #64748b, #334155); }
+  .case-thumb-placeholder {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-size: 48px; opacity: .5;
+  }
+  .case-play-overlay {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(0,0,0,.55); color: #fff; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px); transition: transform .2s;
+  }
+  .case-gallery-card:hover .case-play-overlay { transform: translate(-50%,-50%) scale(1.15); }
+
+  .case-card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+  .case-card-title {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    margin-bottom: 6px; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .case-card-desc {
+    font-size: 13px; color: var(--text-secondary); margin-bottom: 10px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .case-card-meta {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+  }
+  .case-author { font-size: 12px; color: #64748b; font-weight: 600; }
+  .case-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; background: #eff6ff; color: #2563eb;
+  }
+  .case-card-badges { display: flex; gap: 8px; margin-top: auto; }
+  .case-video-badge, .case-prompt-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;
+  }
+  .case-video-badge { background: #fef3c7; color: #b45309; }
+  .case-prompt-badge { background: #dcfce7; color: #15803d; }
+
+  /* ── Case Detail Modal ── */
+
+  .case-video-player {
+    width: 100%; max-height: 80vh; border-radius: 8px; background: #000;
+    outline: none;
+  }
+  .case-video-player::-webkit-media-controls-panel {
+    background: linear-gradient(transparent, rgba(0,0,0,.7));
+  }
+
+  .case-modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+    align-items: flex-start; justify-content: center;
+    overflow-y: auto; padding: 40px 20px;
+  }
+  .case-modal-overlay.show { display: flex; }
+  .case-modal {
+    background: #fff; border-radius: 16px; max-width: 900px; width: 100%;
+    position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    margin-bottom: 40px;
+  }
+  .case-modal-close {
+    position: absolute; top: 16px; right: 20px; z-index: 10;
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(0,0,0,.06); color: #64748b; font-size: 24px;
+    cursor: pointer; transition: all .2s; line-height: 1;
+  }
+  .case-modal-close:hover { background: rgba(0,0,0,.12); color: #1e293b; }
+  .case-modal-content { padding: 32px 36px; }
+
+  .case-detail-header { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
+  .case-detail-header h3 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; border: none; padding: 0; }
+  .case-detail-header .case-detail-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 10px; }
+  .case-detail-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .case-detail-section { margin-bottom: 28px; }
+  .case-detail-section h4 {
+    font-size: 16px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px; padding-left: 12px; border-left: 4px solid var(--primary);
+  }
+
+  .case-video-player {
+    width: 100%; border-radius: 10px; background: #000; margin-bottom: 12px;
+  }
+  .case-video-item {
+    margin-bottom: 16px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .case-video-item video { width: 100%; display: block; }
+  .case-video-item .video-label {
+    padding: 8px 14px; font-size: 13px; color: #64748b;
+    background: #f8fafc; border-bottom: 1px solid var(--border);
+  }
+
+  .case-prompt-item {
+    background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px; font-size: 14px; color: var(--text);
+    line-height: 1.8; white-space: pre-wrap; word-break: break-word;
+  }
+  .case-prompt-item::before {
+    content: "📝"; margin-right: 8px;
+  }
+
+  .case-text-content {
+    background: #f8fafc; border-radius: 10px; padding: 20px 24px;
+    font-size: 14px; color: var(--text-secondary); line-height: 1.9;
+    white-space: pre-wrap; word-break: break-word;
+    max-height: 500px; overflow-y: auto;
+  }
+
+  .case-image-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .case-image-grid img {
+    width: 100%; border-radius: 8px; border: 1px solid var(--border);
+    cursor: pointer; transition: transform .2s;
+  }
+  .case-image-grid img:hover { transform: scale(1.03); }
+
+  @media (max-width: 640px) {
+    .case-gallery-grid { grid-template-columns: 1fr; }
+    .case-modal-content { padding: 24px 20px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ Header ═══ -->
+<header class="app-header">
+  <span class="logo"><img src="images/logo.png" alt="智剪" style="height: 32px; vertical-align: middle; margin-right: 4px;"> 智剪</span>
+  <span class="logo-sub">Insai InVision — AI 批量视频智能混剪平台</span>
+  <nav class="header-nav">
+    <a href="#case-works" onclick="scrollToSection('case-works')">🏆 作品案例</a>
+    <a href="#overview" onclick="scrollToSection('overview')">📖 用户使用指南</a>
+  </nav>
+  <span class="badge">📖 用户使用手册 v1.0</span>
+</header>
+
+<!-- ═══ Layout ═══ -->
+<div class="layout">
+
+  <!-- ═══ TOC Sidebar ═══ -->
+  <nav class="toc-sidebar" id="toc">
+    <div class="toc-title">📑 目录导航</div>
+    <ul class="toc-list">
+
+      <!-- 1. 概述 -->
+      <li><a href="#overview">产品概述</a></li>
+
+      <!-- 2. 脚本 & 任务 -->
+      <span class="toc-group-label">📝 脚本 &amp; 任务</span>
+      <li><a href="#script-gen">智能脚本生成</a></li>
+      <li><a href="#task-mgr">任务配置与管理</a></li>
+
+      <!-- 3. AI 创作 -->
+      <span class="toc-group-label">🤖 AI 创作</span>
+      <li><a href="#video-gen">AI 生成视频</a></li>
+      <li><a href="#image-gen">AI 生图</a></li>
+      <li><a href="#material-split">素材裂变排列组合</a></li>
+
+      <!-- 4. 项目管理 -->
+      <span class="toc-group-label">📁 项目管理</span>
+      <li><a href="#project-create">新建项目</a></li>
+      <li><a href="#project-plan">项目策划</a></li>
+      <li><a href="#project-demand">需求 &amp; 基本信息</a></li>
+      <li><a href="#project-script-task">脚本 &amp; 任务 &amp; 成品</a></li>
+      <li><a href="#project-material-knowledge">物料 &amp; 知识库</a></li>
+
+      <!-- 5. 视频处理（移到项目管理之后）-->
+      <span class="toc-group-label">🎬 视频处理</span>
+      <li><a href="#frame-split">单视频抽帧裂变</a></li>
+      <li><a href="#smart-slice">智能切片</a></li>
+      <li><a href="#quality-enhance">画质增强</a></li>
+      <li><a href="#subtitle-remove">字幕擦除</a></li>
+
+      <!-- 7. 案例作品 -->
+      <span class="toc-group-label">🏆 案例作品</span>
+      <li><a href="#case-works">AI 案例作品展示</a></li>
+
+      <!-- 6. 附录 -->
+      <span class="toc-group-label">💡 附录</span>
+      <li><a href="#quick-start">快速上手流程</a></li>
+      <li><a href="#faq">常见问题</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="main-content">
+
+    <!-- ─── Hero Banner ─── -->
+    <div class="hero-banner">
+      <h1>智剪（ZhiJian）用户使用手册</h1>
+      <p>批量视频智能混剪 · AI 一键成片 · 全链路素材裂变</p>
+      <div class="hero-tags">
+        <span class="tag">智能切片</span>
+        <span class="tag">批量混剪</span>
+        <span class="tag">AI生图</span>
+        <span class="tag">AI生视频</span>
+        <span class="tag">字幕擦除</span>
+        <span class="tag">项目管理</span>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════ 1 产品概述 ═══════════════ -->
+    <section id="overview">
+      <h2><span class="num">1</span>产品概述</h2>
+      <div class="feature-card">
+        <h4>什么是智剪？</h4>
+        <p>智剪是一款面向内容创作者和运营团队的<strong>AI 批量视频混剪平台</strong>。它集成了智能切片、智能打标、智能脚本生成、AI 生图、AI 生视频、字幕擦除、画质增强等核心能力，帮助用户从原始素材到成片输出实现全流程自动化。</p>
+        <br>
+        <table class="info-table">
+          <tr><th style="width:140px">产品名称</th><td>智剪（Insai InVision）</td></tr>
+          <tr><th>产品定位</th><td>批量视频智能混剪工具 + AI 创作工作台</td></tr>
+          <tr><th>访问方式</th><td>企微工作台 → 业务运营赋能 → 智剪</td></tr>
+          <tr><th>计费体系</th><td>星火币（余额自动同步）</td></tr>
+          <tr><th>支持格式</th><td>MP4 / MOV / PNG / JPEG 等</td></tr>
+        </table>
+      </div>
+
+      <h3>核心能力一览</h3>
+      <div class="img-grid">
+        <div class="feature-card">
+          <h4>🔪 智能切片</h4>
+          <p>自动识别视频中的精彩片段（高光对话、动作场景、卖点时刻），一键拆分。</p>
+        </div>
+        <div class="feature-card">
+          <h4>🏷️ 智能打标</h4>
+          <p>为素材自动添加场景、情绪、物体标签，便于快速检索与分类。</p>
+        </div>
+        <div class="feature-card">
+          <h4>📜 脚本生成</h4>
+          <p>根据素材内容自动生成剪辑脚本，含转场、BGM、字幕建议。</p>
+        </div>
+        <div class="feature-card">
+          <h4>🎬 批量混剪</h4>
+          <p>一键合并数百条片段，支持预设模板（带货/Vlog/活动回顾等）。</p>
+        </div>
+        <div class="feature-card">
+          <h4>🖼️ AI 生图</h4>
+          <p>文字描述或参考图一键生成营销图片，多比例、多格式、多质量可选。</p>
+        </div>
+        <div class="feature-card">
+          <h4>🎥 AI 生视频</h4>
+          <p>输入文案/素材，AI 自动生成短视频，支持多种分辨率和时长。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 2 智能脚本生成 ═══════════════ -->
+    <section id="script-gen">
+      <h2><span class="num">2</span>智能脚本生成</h2>
+      <p><strong>功能说明：</strong>基于已有素材和创意需求，AI 自动生成结构化剪辑方案（含分镜、口播稿、配乐建议）。</p>
+
+      <div class="img-group">
+        <img src="images/script.png" alt="脚本生成界面" class="screenshot">
+        <p class="img-caption">图 2-1：脚本生成工作台</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>如何生成脚本</h4>
+        <table class="info-table">
+          <tr><th>字段</th><th>说明</th></tr>
+          <tr><td>任务名称</td><td>给本次脚本起名（如：五一放假脚本）</td></tr>
+          <tr><td>目标时长</td><td>选择期望时长范围（如 <strong>15~30 秒</strong>）</td></tr>
+          <tr><td>脚本个数</td><td>一次性生成的备选方案数量</td></tr>
+          <tr><td>创意要求</td><td>描述脚本的目标、卖点、受众风格偏好</td></tr>
+          <tr><td>切片选择</td><td>从已切片素材中勾选参与脚本的片段</td></tr>
+        </table>
+        <br>
+        <p>填写完毕后点击蓝色按钮<strong>「生成脚本」</strong>，右侧面板即时呈现方案列表和脚本详情。</p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 3 任务配置与管理 ═══════════════ -->
+    <section id="task-mgr">
+      <h2><span class="num">3</span>任务配置与管理</h2>
+      <p>任务是智剪的核心调度单元，每个混剪/生图/生视频操作都以「任务」形式组织。</p>
+
+      <h3>3.1 创建任务</h3>
+      <div class="img-group">
+        <img src="images/task.png" alt="任务创建" class="screenshot">
+        <p class="img-caption">图 3-1：任务配置页面（三步式向导）</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>Step 1 — 基础配置</h4>
+        <ul class="steps">
+          <li>填写<strong>任务名称</strong>（必填）</li>
+          <li>关联<strong>客户项目</strong>（下拉选择）</li>
+          <li>填写<strong>创意要求</strong>（描述需求背景和目标）</li>
+        </ul>
+      </div>
+
+      <h3>3.2 配置细节选项</h3>
+      <div class="img-grid">
+        <div>
+          <img src="images/task2.png" alt="任务-素材类型" class="screenshot">
+          <p class="img-caption">图 3-2：任务素材区（原始素材/切片素材/音效/图片）</p>
+        </div>
+        <div>
+          <img src="images/task3.png" alt="任务-数量" class="screenshot">
+          <p class="img-caption">图 3-3：设置视频数量（1~7 条）</p>
+        </div>
+      </div>
+
+      <div class="img-grid">
+        <div>
+          <img src="images/task4.png" alt="任务-时长" class="screenshot">
+          <p class="img-caption">图 3-4：时长选项（6-15秒 / 15-30秒 / 30-45秒 / 45-60秒）</p>
+        </div>
+        <div>
+          <img src="images/task5.png" alt="任务-画幅" class="screenshot">
+          <p class="img-caption">图 3-5：画幅选择（开启 / 关闭）</p>
+        </div>
+      </div>
+
+      <div class="img-group">
+        <img src="images/task6.png" alt="任务-分辨率" class="screenshot">
+        <p class="img-caption">图 3-6：分辨率选择（1080p / 720p / 新生4K 等多种规格）</p>
+      </div>
+
+      <h3>3.3 查看创意方案</h3>
+      <div class="img-group">
+        <img src="images/task1.png" alt="任务-方案" class="screenshot">
+        <p class="img-caption">图 3-7：AI 生成多个创意方案（方案 A/B/C/D），含评分、口播文案、设计要点</p>
+      </div>
+
+      <p>每个方案包含以下信息：</p>
+      <table class="info-table">
+        <tr><th>维度</th><th>内容</th></tr>
+        <tr><td>创意思路</td><td>AI 对需求的理解和策略方向</td></tr>
+        <tr><td>方案评估</td><td>综合评分 + 优点 / 不足 分析</td></tr>
+        <tr><td>创意方案</td><td>时间轴表格：结构、口播字稿、视频素材引用、设计要点</td></tr>
+        <tr><td>混剪作业</td><td>右侧实时预览各 Remix 成片缩略图及进度</td></tr>
+      </table>
+    </section>
+
+
+    <!-- ═══════════════ 4 AI 生成视频 ═══════════════ -->
+    <section id="video-gen">
+      <h2><span class="num">4</span>AI 生成视频</h2>
+      <p>输入文本描述或口播稿，配合参考图片/视频素材，AI 自动生成完整短视频。</p>
+
+      <div class="img-group">
+        <img src="images/generate.png" alt="生成视频-初始" class="screenshot">
+        <p class="img-caption">图 4-1：生成任务配置界面</p>
+      </div>
+
+      <h3>4.1 参数设置</h3>
+      <div class="feature-card">
+        <table class="info-table">
+          <tr><th>参数</th><th>说明</th><th>可选值示例</th></tr>
+          <tr><td>模型版本</td><td>底层生成引擎</td><td>Seedance 2.0 快照版 / 其他</td></tr>
+          <tr><td>视频数量</td><td>一次生成的视频条数</td><td>1 ~ 15+</td></tr>
+          <tr><td>视频时长</td><td>单条视频长度</td><td>5秒 / 9:16 / 自定义</td></tr>
+          <tr><td>分辨率</td><td>输出清晰度</td><td>720×720 / 720×1280 / 1080×1920 等</td></tr>
+          <tr><td>参考图/视频</td><td>风格参考素材</td><td>支持多张图片 + 多个视频同时上传</td></tr>
+        </table>
+      </div>
+
+      <div class="img-grid">
+        <div>
+          <img src="images/generate1.png" alt="生成-素材列表" class="screenshot">
+          <p class="img-caption">图 4-2：素材列表 —— 可引用图片/音频/视频/webp</p>
+        </div>
+        <div>
+          <img src="images/generate2.png" alt="生成-宽高比" class="screenshot">
+          <p class="img-caption">图 4-3：宽高比选择（9:16竖屏 / 4:3 / 3:4 / 1:1 / 16:9等）</p>
+        </div>
+      </div>
+
+      <div class="img-group">
+        <img src="images/generate3.png" alt="生成-分辨率" class="screenshot">
+        <p class="img-caption">图 4-4：更多分辨率选项（480P ~ 4K 多档位）</p>
+      </div>
+
+      <h3>4.2 生成状态与预览</h3>
+      <div class="tip-box">
+        💡 点击「提交任务」后，右侧「生成状态」面板实时反馈进度。<span class="tag tag-green">生成完成</span> 后可直接预览；若失败则显示红色错误信息及原因。
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 5 AI 生图 ═══════════════ -->
+    <section id="image-gen">
+      <h2><span class="num">5</span>AI 生图</h2>
+      <p>基于文生图模型，通过文字描述或参考图快速生成营销图片（商品海报、详情页主图等）。</p>
+
+      <h3>5.1 创建生图任务</h3>
+      <div class="img-group">
+        <img src="images/img-gen.png" alt="生图-初始" class="screenshot">
+        <p class="img-caption">图 5-1：生图任务配置 —— 选择模型、上传参考图、填写提示词</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>基础配置项</h4>
+        <table class="info-table">
+          <tr><th>字段</th><th>说明</th></tr>
+          <tr><td>任务名称</td><td>如「电商详情页主图」</td></tr>
+          <tr><td>模型</td><td>当前选用 <code>gpt-image-2</code>（APIKit 推荐模型）</td></tr>
+          <tr><td>参考图</td><td>上传一张风格/构图参考图（可选但推荐）</td></tr>
+          <tr><td>提示词</td><td>描述你想要的画面内容（中文即可）</td></tr>
+        </table>
+      </div>
+
+      <h3>5.2 输出参数详解</h3>
+      <div class="img-grid">
+        <div>
+          <img src="images/img-gen1.png" alt="生图-参考图" class="screenshot">
+          <p class="img-caption">图 5-2：上传参考图后右侧预览生成效果</p>
+        </div>
+        <div>
+          <img src="images/img-gen2.png" alt="生图-比例" class="screenshot">
+          <p class="img-caption">图 5-3：比例选择（9:16竖屏 / 1:1方形 / 2:3 / 3:4 / 3:2 / 4:3 / 16:9横屏）</p>
+        </div>
+      </div>
+
+      <div class="img-grid">
+        <div>
+          <img src="images/img-gen3.png" alt="生图-更多比例" class="screenshot">
+          <p class="img-caption">图 5-4：完整比例下拉列表</p>
+        </div>
+        <div>
+          <img src="images/img-gen-format.png" alt="生图-格式" class="screenshot">
+          <p class="img-caption">图 5-5：输出格式（PNG / JPEG / WEBP）</p>
+        </div>
+      </div>
+
+      <div class="img-group">
+        <img src="images/img-gen-quality.png" alt="生图-质量" class="screenshot">
+        <p class="img-caption">图 5-6：质量等级（低 / 中 / 高）</p>
+      </div>
+
+      <div class="warn-box">
+        ⚠️ 质量越高、分辨率越大，消耗的星火币越多。建议先用「中」质量测试提示词效果，确认满意后再切换「高」质量正式出图。
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 6 素材裂变排列组合 ═══════════════ -->
+    <section id="material-split">
+      <h2><span class="num">6</span>素材裂变排列组合</h2>
+      <p><strong>功能说明：</strong>将多个文件夹中的素材按排列组合规则批量裂变，生成大量变体素材，适合 A/B 测试和多渠道分发场景。</p>
+
+      <div class="img-group">
+        <img src="images/material-split.png" alt="素材裂变排列组合" class="screenshot">
+        <p class="img-caption">图 6-1：素材裂变平台 —— 排列组合模式</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>操作流程</h4>
+        <ol class="steps">
+          <li>切换到「<strong>剪辑排列组合</strong>」标签页</li>
+          <li>填写<strong>任务名称</strong></li>
+          <li>选择<strong>输出目录</strong></li>
+          <li>设置<strong>每个文件夹里的视频最多能用几次</strong></li>
+          <li>选择业务标签和素材类型</li>
+          <li>上传多个素材文件夹</li>
+          <li>点击「<strong>开始排列组合</strong>」</li>
+        </ol>
+        <br>
+        <p>右侧面板实时显示组合进度和产物列表（Variant / Source Chain / Quality / Output）。</p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 7 项目管理 ═══════════════ -->
+    <section id="project-manage">
+      <h2><span class="num">7</span>项目管理</h2>
+      <p>智剪以「项目」为单位组织所有创作活动。一个项目下包含：需求、策划、脚本、任务、成品、物料、知识库等完整生命周期。</p>
+
+      <h3 id="project-create">7.1 新建项目</h3>
+      <div class="img-group">
+        <img src="images/proj-create.png" alt="新建项目" class="screenshot">
+        <p class="img-caption">图 7-1：创建项目弹窗 —— 填写基本信息、游戏属性、发布平台</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>必填信息</h4>
+        <table class="info-table">
+          <tr><th>字段</th><th>说明</th></tr>
+          <tr><td>项目名</td><td>项目唯一标识名</td></tr>
+          <tr><td>游戏名</td><td>关联的游戏/品牌名称</td></tr>
+          <tr><td>游戏类型</td><td>下拉选择游戏品类</td></tr>
+          <tr><td>行业属性</td><td>游戏 / 短剧 / 漫剧</td></tr>
+          <tr><td>主要客群</td><td>目标用户画像</td></tr>
+          <tr><td>拟发平台</td><td>☐ 抖音 ☐ B站 ☐ 小红书</td></tr>
+          <tr><td>游戏卖点 / 介绍</td><td>用于 AI 生成时的上下文理解</td></tr>
+        </table>
+      </div>
+
+      <h3 id="project-plan">7.2 项目策划</h3>
+      <div class="img-group">
+        <img src="images/proj-plan.png" alt="项目策划" class="screenshot">
+        <p class="img-caption">图 7-2：策划页 —— 录入创意思路和方向，点击「创建拆解」生成子任务</p>
+      </div>
+
+      <h3 id="project-demand">7.3 需求 &amp; 基本信息</h3>
+      <div class="img-grid">
+        <div>
+          <img src="images/proj-demand.png" alt="项目需求" class="screenshot">
+          <p class="img-caption">图 7-3：需求描述页 —— 详细录入需求描述、链接、竞品信息</p>
+        </div>
+        <div>
+          <img src="images/proj-info.png" alt="项目基本信息" class="screenshot">
+          <p class="img-caption">图 7-4：基本信息 —— 行业标签、项目背景</p>
+        </div>
+      </div>
+      <div class="img-group">
+        <img src="images/proj-info1.png" alt="项目基本信息-编辑" class="screenshot">
+        <p class="img-caption">图 7-5：基本信息编辑态</p>
+      </div>
+
+      <h3 id="project-script-task">7.4 脚本、任务 &amp; 成品</h3>
+      <div class="img-grid">
+        <div>
+          <img src="images/proj-script.png" alt="项目脚本" class="screenshot">
+          <p class="img-caption">图 7-6：项目脚本 —— 参考脚本/作业脚本管理</p>
+        </div>
+        <div>
+          <img src="images/proj-task.png" alt="项目任务" class="screenshot">
+          <p class="img-caption">图 7-7：项目任务列表 —— 显示所有子任务的状态、视频数、进度</p>
+        </div>
+      </div>
+      <div class="img-group">
+        <img src="images/proj-product.png" alt="项目成品" class="screenshot">
+        <p class="img-caption">图 7-8：成品库 —— 所有已完成 Remix 成片的网格视图，支持预览/下载</p>
+      </div>
+
+      <h3 id="project-material-knowledge">7.5 物料 &amp; 知识库</h3>
+      <div class="img-grid">
+        <div>
+          <img src="images/proj-material.png" alt="项目物料" class="screenshot">
+          <p class="img-caption">图 7-9：物料库 —— 原始视频/解说视频/背景音乐/音效/底板图/片头片尾</p>
+        </div>
+        <div>
+          <img src="images/proj-knowledge.png" alt="项目知识" class="screenshot">
+          <p class="img-caption">图 7-10：知识库 —— 分类标签化管理（剪辑知识/撰纲知识/游戏知识等）</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 8 视频处理 ═══════════════ -->
+    <section id="video-process">
+      <h2><span class="num">8</span>视频处理工具</h2>
+      <p>智剪提供一系列视频预处理工具，帮助你在进入混剪流程前优化原始素材。</p>
+
+      <!-- 8.1 单视频抽帧裂变 -->
+      <h3 id="frame-split">8.1 单视频抽帧裂变</h3>
+      <p><strong>功能说明：</strong>对单个视频进行逐帧抽帧并裂变为多个输出变体，适用于从一条长视频中批量提取关键帧画面。</p>
+
+      <div class="feature-card">
+        <h4>操作步骤</h4>
+        <ol class="steps">
+          <li>进入「智剪素材裂变平台」→ 选择「<strong>单视频抽帧裂变</strong>」标签页</li>
+          <li>点击「选择主视频」上传源文件（MP4/MOV等）</li>
+          <li>设置输出目录路径</li>
+          <li>填写任务名称、裂变数量、每秒抽取帧数</li>
+          <li>选择业务标签和素材类型（如：剪辑）</li>
+          <li>点击「<strong>开始抽帧裂变</strong>」，右侧面板实时显示运行日志</li>
+        </ol>
+      </div>
+
+      <div class="img-group">
+        <img src="images/frame-split.png" alt="单视频抽帧裂变界面" class="screenshot">
+        <p class="img-caption">图 8-1：单视频抽帧裂变操作界面</p>
+      </div>
+
+      <div class="warn-box">
+        ⚠️ 注意：抽帧过程依赖 FFmpeg 运行时环境，若出现「Error initializing filters」错误，请检查视频编码参数是否兼容。
+      </div>
+
+      <!-- 8.2 智能切片 -->
+      <h3 id="smart-slice">8.2 智能切片</h3>
+      <p><strong>功能说明：</strong>系统自动识别视频中的场景切换点和高光时刻，将长视频切分为若干有意义的片段。</p>
+
+      <div class="feature-card">
+        <h4>操作入口</h4>
+        <p>顶部导航栏 → <strong>「切片」</strong> Tab 页</p>
+      </div>
+
+      <div class="img-group">
+        <img src="images/slice.png" alt="智能切片界面" class="screenshot">
+        <p class="img-caption">图 8-2：智能切片工作台 —— 上传视频后自动识别片段</p>
+      </div>
+
+      <ol class="steps">
+        <li>在左侧「所属项目」下拉框中选择目标项目</li>
+        <li>拖拽或点击上传视频文件（支持 MP4/MOV）</li>
+        <li>系统自动执行切片分析，左侧列表展示已生成的切片任务</li>
+        <li>右侧预览区可播放查看每个切片片段</li>
+        <li>点击右上角切片列表可进行全选/批量导出</li>
+      </ol>
+
+      <div class="tip-box">
+        💡 提示：切片灵敏度可在工具设置中调整——值越高，切割出的片段越多越细。
+      </div>
+
+      <!-- 8.3 画质增强 -->
+      <h3 id="quality-enhance">8.3 画质增强</h3>
+      <p><strong>功能说明：</strong>利用 AI 超分辨率技术提升视频/图片的清晰度，支持 4K 输出。</p>
+
+      <div class="img-group">
+        <img src="images/quality-enhance.jpg" alt="画质增强界面" class="screenshot">
+        <p class="img-caption">图 8-3：画质增强模块 —— 处理前 vs 处理后对比</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>使用方法</h4>
+        <ol class="steps">
+          <li>顶部导航进入<strong>「高清增强」</strong>页签</li>
+          <li>选择增强模式：<span class="tag tag-blue">专业版</span> 或 <span class="tag tag-green">AIGC 视频</span></li>
+          <li>设置目标分辨率（如 <strong>4K</strong>）及宽高像素值</li>
+          <li>设置日帧率参数</li>
+          <li>上传视频，系统自动处理并在右侧显示前后对比效果</li>
+        </ol>
+      </div>
+
+      <!-- 8.4 字幕擦除 -->
+      <h3 id="subtitle-remove">8.4 字幕擦除</h3>
+      <p><strong>功能说明：</strong>AI 自动检测并去除视频中的硬字幕/水印区域，还原干净画面。</p>
+
+      <div class="img-grid">
+        <div>
+          <img src="images/subtitle-remove.png" alt="字幕擦除-水印" class="screenshot">
+          <p class="img-caption">图 8-4：擦除 TikTok 水印效果</p>
+        </div>
+        <div>
+          <img src="images/subtitle-remove2.jpg" alt="字幕擦除-硬字幕" class="screenshot">
+          <p class="img-caption">图 8-5：擦除硬字幕效果</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>操作指引</h4>
+        <ol class="steps">
+          <li>导航至<strong>「字幕擦除」</strong>功能页</li>
+          <li>选择擦除模式：
+            <span class="tag tag-blue">字幕擦除</span>
+            <span class="tag tag-purple">字幕擦除</span>
+            <span class="tag tag-orange">文字擦除</span>
+          </li>
+          <li>选择码模式（质量优先 / 填补模式）</li>
+          <li>上传视频，在预览区框选需要擦除的区域</li>
+          <li>点击「<strong>已处理</strong>」查看结果，右侧为处理后效果</li>
+        </ol>
+        <br>
+        <p>底部可查看每条擦除任务的坐标参数详情（左上X/Y、右下X/Y），支持精确调整。</p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ 快速上手 ═══════════════ -->
+    <section id="quick-start">
+      <h2><span class="num">9</span>快速上手流程</h2>
+      <div class="feature-card">
+        <h4>🚀 从零产出第一条视频（5 步走）</h4>
+        <ol class="steps">
+          <li><strong>创建项目</strong> → 进入「项目」Tab → 「+ 新建项目」→ 填写项目名和基本信息</li>
+          <li><strong>上传物料</strong> → 项目内切换到「物料」Tab → 上传原始视频和参考图片</li>
+          <li><strong>智能切片</strong> → 进入「切片」Tab → 选择项目 → 上传视频 → 自动生成切片片段</li>
+          <li><strong>创建任务</strong> → 进入「任务」Tab → 「+ 一键创建」→ 选项目/填要求/设时长分辨率</li>
+          <li><strong>提交生成</strong> → 查看 AI 方案 → 确认后提交 → 右侧「混剪作业」等待完成 → 下载成品</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        💡 <strong>效率技巧：</strong>善用「脚本」功能先让 AI 出方案，确认创意方向后再跑任务，可大幅减少无效生成消耗的星火币。
+      </div>
+    </section>
+
+
+    <!-- ═══════════════ FAQ ═══════════════ -->
+    <section id="faq">
+      <h2><span class="num">10</span>常见问题</h2>
+      <div class="feature-card">
+        <h4>Q1：星火币余额不足怎么办？</h4>
+        <p>星火币由公司统一发放，通过企微工作台自动同步。若余额不足，请联系部门管理员申请额度。</p>
+        <hr style="margin:14px 0;border:none;border-top:1px dashed #e2e8f0;">
+        <h4>Q2：任务生成失败怎么排查？</h4>
+        <p>在生成状态面板会显示具体错误信息（如分辨率不支持、内容违规等）。根据提示调整参数后重新提交即可。</p>
+        <hr style="margin:14px 0;border:none;border-top:1px dashed #e2e8f0;">
+        <h4>Q3：如何提高成片质量？</h4>
+        <p>① 使用更清晰的原始素材；② 在创意要求中详细描述画面风格和节奏；③ 选择更高分辨率和质量档位；④ 上传参考图锁定风格一致性。</p>
+        <hr style="margin:14px 0;border:none;border-top:1px dashed #e2e8f0;">
+        <h4>Q4：支持哪些视频格式导入？</h4>
+        <p>主流格式均支持：MP4、MOV、AVI、MKV 等。建议优先使用 MP4 (H.264/H.265 编码) 以获得最佳兼容性。</p>
+        <hr style="margin:14px 0;border:none;border-top:1px dashed #e2e8f0;">
+        <h4>Q5：成品保存在哪里？</h4>
+        <p>自动保存至项目的「成品」Tab 下，也同步到个人资产库。支持在线预览和批量下载。</p>
+      </div>
+    </section>
+
+
+
+    <!-- ═══════════════ 案例作品（本地视频版） ═══════════════ -->
+    <section id="case-works">
+      <h2><span class="num">11</span>案例作品</h2>
+      <p>精选 AI 视频创作实战案例，涵盖电商、游戏、保险、金融、教育等多个行业，所有视频均为本地案例资源。</p>
+
+      <div class="case-filter-bar">
+        <button class="case-filter-btn active" onclick="filterCases('all', this)">全部</button>
+        <button class="case-filter-btn" onclick="filterCases('电商', this)">电商</button>
+        <button class="case-filter-btn" onclick="filterCases('游戏', this)">游戏</button>
+        <button class="case-filter-btn" onclick="filterCases('保险', this)">保险</button>
+        <button class="case-filter-btn" onclick="filterCases('金融', this)">金融</button>
+        <button class="case-filter-btn" onclick="filterCases('教育', this)">教育</button>
+        <button class="case-filter-btn" onclick="filterCases('家居建材', this)">家居建材</button>
+        <button class="case-filter-btn" onclick="filterCases('二轮车', this)">二轮车</button>
+        <button class="case-filter-btn" onclick="filterCases('video', this)">有视频</button>
+      </div>
+
+      <div class="case-gallery-grid" id="caseGallery">
+
+        <div class="case-gallery-card" onclick="openCaseDetail(1)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c1.jpg" alt="🚀 电商低预算视频照样高质量" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">🚀 电商低预算视频照样高质量</h4>
+            <p class="case-card-desc">刘文杰：活用智影全家桶（Seedance2.0 · GPT image 2.0），在低预算、低产能占比的情况下，依然保证电商视频的高质量输出</p>
+            <div class="case-card-meta">
+              <span class="case-author">@刘文杰</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 8个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(2)">
+          <div class="case-card-thumb" style="padding-top: 181.94%;">
+            <img src="images/cases/thumbs/c2.jpg" alt="低成本海外投放AI视频制作实战" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">低成本海外投放AI视频制作实战</h4>
+            <p class="case-card-desc">彭赛：教你搞定AI社媒海外投放</p>
+            <div class="case-card-meta">
+              <span class="case-author">@彭赛</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(3)">
+          <div class="case-card-thumb" style="padding-top: 56.25%;">
+            <img src="images/cases/thumbs/c3.jpg" alt="3步搞定《三角洲行动》AI宣传片" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">3步搞定《三角洲行动》AI宣传片</h4>
+            <p class="case-card-desc">曾思：可复用的成熟案例，效率提升10倍</p>
+            <div class="case-card-meta">
+              <span class="case-author">@曾思</span>
+              <span class="case-tag">游戏</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(4)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c4.jpg" alt="众安保险微剧情 · AI情景剧生成实践" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">众安保险微剧情 · AI情景剧生成实践</h4>
+            <p class="case-card-desc">杨杰：保险AI情景剧案例</p>
+            <div class="case-card-meta">
+              <span class="case-author">@杨杰</span>
+              <span class="case-tag">保险</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 2个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(5)">
+          <div class="case-card-thumb" style="padding-top: 56.25%;">
+            <img src="images/cases/thumbs/c5.jpg" alt="AI游戏视频片头秘籍" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">AI游戏视频片头秘籍</h4>
+            <p class="case-card-desc">林梓阳：古风游戏AI片头低成本高质量创作方案</p>
+            <div class="case-card-meta">
+              <span class="case-author">@林梓阳</span>
+              <span class="case-tag">游戏</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(6)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c6.jpg" alt="超吸睛营销AI视频新玩法" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">超吸睛营销AI视频新玩法</h4>
+            <p class="case-card-desc">梁文冠：天天爱消除猫咪剧情 | 游戏营销新玩法</p>
+            <div class="case-card-meta">
+              <span class="case-author">@梁文冠</span>
+              <span class="case-tag">游戏</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(7)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c7.jpg" alt="AI赋能美妆广告：从高成本TVC到分钟级出片" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">AI赋能美妆广告：从高成本TVC到分钟级出片</h4>
+            <p class="case-card-desc">江金：让AI高效听懂"美妆语言"，减少返工</p>
+            <div class="case-card-meta">
+              <span class="case-author">@江金</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(8)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c8.jpg" alt="家居建材类微剧情" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">家居建材类微剧情</h4>
+            <p class="case-card-desc">潘嘉军：构建人脸库，角色一致性不再愁</p>
+            <div class="case-card-meta">
+              <span class="case-author">@潘嘉军</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 9个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(9)">
+          <div class="case-card-thumb" style="padding-top: 56.25%;">
+            <img src="images/cases/thumbs/c9.jpg" alt="3步生成"AI城市画卷"国风宣传大片" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">3步生成"AI城市画卷"国风宣传大片</h4>
+            <p class="case-card-desc">谢文亮：中国城市画卷案例全拆解</p>
+            <div class="case-card-meta">
+              <span class="case-author">@谢文亮</span>
+              <span class="case-tag">教育</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(10)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c10.jpg" alt="AI电商短剧工作流" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">AI电商短剧工作流</h4>
+            <p class="case-card-desc">陈娜：从剧本到成片，AI剧情工作流</p>
+            <div class="case-card-meta">
+              <span class="case-author">@陈娜</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 2个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(11)">
+          <div class="case-card-thumb" style="padding-top: 177.73%;">
+            <img src="images/cases/thumbs/c11.jpg" alt="高转化爆款AI视频实战方法论" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">高转化爆款AI视频实战方法论</h4>
+            <p class="case-card-desc">黄梓聪：如何用AI视频打造高转化投放素材</p>
+            <div class="case-card-meta">
+              <span class="case-author">@黄梓聪</span>
+              <span class="case-tag">游戏</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 3个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(12)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c12.jpg" alt="破解AI抽卡翻车，真人剧情广告AI视频赋能" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">破解AI抽卡翻车，真人剧情广告AI视频赋能</h4>
+            <p class="case-card-desc">黄钰岚：还在为AI视频抽卡、乱码头疼？教你解决</p>
+            <div class="case-card-meta">
+              <span class="case-author">@黄钰岚</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 3个视频</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-gallery-card" onclick="openCaseDetail(13)">
+          <div class="case-card-thumb" style="padding-top: 56.25%;">
+            <img src="images/cases/thumbs/c13.jpg" alt="泰康保险AI微动视频实战" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">泰康保险AI微动视频实战</h4>
+            <p class="case-card-desc">王敏杰：泰康保险竖版AI微动视频，人像驱动赋能保险营销</p>
+            <div class="case-card-meta">
+              <span class="case-author">@王敏杰</span>
+              <span class="case-tag">金融保险</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 4个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(14)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c14.jpg" alt="教育行业AI视频创作" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">教育行业AI视频创作</h4>
+            <p class="case-card-desc">李淑娟：教育场景AI视频实战应用</p>
+            <div class="case-card-meta">
+              <span class="case-author">@李淑娟</span>
+              <span class="case-tag">教育</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(15)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c15.jpg" alt="游戏福利AI视频制作" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">游戏福利AI视频制作</h4>
+            <p class="case-card-desc">赵梓莹：海奇互动游戏福利韩语AI视频</p>
+            <div class="case-card-meta">
+              <span class="case-author">@赵梓莹</span>
+              <span class="case-tag">游戏</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 1个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(16)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c16.jpg" alt="电商AI视频生成实战" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">电商AI视频生成实战</h4>
+            <p class="case-card-desc">洪泽江：电商场景AI视频生成，Seedance驱动高质量输出</p>
+            <div class="case-card-meta">
+              <span class="case-author">@洪泽江</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 2个视频</span>
+            </div>
+          </div>
+        </div>
+        <div class="case-gallery-card" onclick="openCaseDetail(17)">
+          <div class="case-card-thumb" style="padding-top: 177.78%;">
+            <img src="images/cases/thumbs/c17.jpg" alt="跨境电商AI视频脚本制作" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">跨境电商AI视频脚本制作</h4>
+            <p class="case-card-desc">宋世豪：ALA墨西哥等跨境电商AI视频脚本试做</p>
+            <div class="case-card-meta">
+              <span class="case-author">@宋世豪</span>
+              <span class="case-tag">电商</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 4个视频</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-gallery-card" onclick="openCaseDetail(18)">
+          <div class="case-card-thumb" style="padding-top: 176.48%;">
+            <img src="images/cases/thumbs/c18.jpg" alt="二轮车AI空境制作实战" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb')">
+            <div class="case-play-overlay">▶</div>
+          </div>
+          <div class="case-card-body">
+            <h4 class="case-card-title">二轮车AI空境制作实战</h4>
+            <p class="case-card-desc">潘嘉军：二轮车项目AI空境视频，多场景批量生成</p>
+            <div class="case-card-meta">
+              <span class="case-author">@潘嘉军</span>
+              <span class="case-tag">二轮车</span>
+            </div>
+            <div class="case-card-badges">
+              <span class="case-video-badge">🎬 9个视频</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="case-modal-overlay" id="caseModal" onclick="closeCaseDetail(event)">
+      <div class="case-modal" onclick="event.stopPropagation()">
+        <button class="case-modal-close" onclick="closeCaseDetail()">&times;</button>
+        <div class="case-modal-content" id="caseModalContent">
+        </div>
+      </div>
+    </div>
+
+<!-- ═══ Back to Top ═══ -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ═══ Lightbox ═══ -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+// ── Scroll Spy TOC (supports both section[id] and h3[id] targets) ──
+const tocLinks = document.querySelectorAll('.toc-list a');
+const backTop = document.getElementById('backTop');
+
+// Collect ALL anchorable targets (sections and h3 with ids)
+function getAllTargets() {
+  const targets = [];
+  document.querySelectorAll('section[id], h3[id]').forEach(el => {
+    targets.push({ id: el.id, offsetTop: el.offsetTop });
+  });
+  return targets.sort((a,b) => a.offsetTop - b.offsetTop);
+}
+
+function updateTOC() {
+  const allTargets = getAllTargets();
+  let current = '';
+  const scrollTop = window.scrollY + 120;
+
+  for (let i = allTargets.length - 1; i >= 0; i--) {
+    if (scrollTop >= allTargets[i].offsetTop) {
+      current = allTargets[i].id;
+      break;
+    }
+  }
+
+  tocLinks.forEach(a => {
+    const href = a.getAttribute('href').replace('#', '');
+    a.parentElement.classList.toggle('active', href === current);
+  });
+
+  backTop.classList.toggle('show', window.scrollY > 400);
+}
+
+window.addEventListener('scroll', updateTOC, { passive: true });
+updateTOC();
+
+// ── Smooth scroll for TOC links ──
+tocLinks.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const targetId = a.getAttribute('href');
+    const target = document.querySelector(targetId);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ── Lightbox ──
+document.querySelectorAll('.screenshot').forEach(img => {
+  img.addEventListener('click', () => {
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightbox').classList.add('show');
+  });
+});
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+
+  // ── Case Works Data ──
+  const caseData = [
+  {
+    "id": 1,
+    "title": "🚀 电商低预算视频照样高质量",
+    "description": "刘文杰：活用智影全家桶（Seedance2.0 · GPT image 2.0），在低预算、低产能占比的情况下，依然保证电商视频的高质量输出",
+    "author": "刘文杰",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c1.jpg",
+    "primaryVideo": "images/cases/videos/v1_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v1_1.mp4",
+      "images/cases/videos/v1_2.mp4",
+      "images/cases/videos/v1_3.mp4",
+      "images/cases/videos/v1_4.mp4",
+      "images/cases/videos/v1_5.mp4",
+      "images/cases/videos/v1_6.mp4",
+      "images/cases/videos/v1_7.mp4",
+      "images/cases/videos/v1_8.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/author_1.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：刘文杰 | 部门：第三事业部（效果BU/KA第一创意中心/视频六组）\n\n核心：活用智影全家桶（Seedance2.0 · GPT image 2.0），在低预算、低产能占比的情况下，依然保证电商视频的高质量输出\n\n工具：智影/智图/智剪\n\n成果：8条实战案例视频展示，覆盖多种电商场景与产品类型"
+  },
+  {
+    "id": 2,
+    "title": "低成本海外投放AI视频制作实战",
+    "description": "彭赛：教你搞定AI社媒海外投放",
+    "author": "彭赛",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c2.jpg",
+    "primaryVideo": "images/cases/videos/v2_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1310,
+    "allVideos": [
+      "images/cases/videos/v2_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：电商 | 彭赛\n\n海外社交微剧情：低成本海外投放视频制作实战。TikTok参考 + 豆包提示词优化 + 即梦生成 = 低成本海外视频。"
+  },
+  {
+    "id": 3,
+    "title": "3步搞定《三角洲行动》AI宣传片",
+    "description": "曾思：可复用的成熟案例，效率提升10倍",
+    "author": "曾思",
+    "industry": [
+      "游戏"
+    ],
+    "thumbnail": "images/cases/thumbs/c3.jpg",
+    "primaryVideo": "images/cases/videos/v3_1.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "allVideos": [
+      "images/cases/videos/v3_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：游戏 | 曾思\n\n通过直接复用即梦AI成熟案例进行模仿生成，原本需要专业建模才能实现的视觉效果，现在一键即可完成，大幅提升制作效率与产品质量。"
+  },
+  {
+    "id": 4,
+    "title": "众安保险微剧情 · AI情景剧生成实践",
+    "description": "杨杰：保险AI情景剧案例",
+    "author": "杨杰",
+    "industry": [
+      "保险"
+    ],
+    "thumbnail": "images/cases/thumbs/c4.jpg",
+    "primaryVideo": "images/cases/videos/v4_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v4_1.mp4",
+      "images/cases/videos/v4_2.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：保险 | 杨杰\n\n众安保险微剧情 · AI情景剧生成实践。使用 Seedance 2.0 工具制作保险情景剧视频。"
+  },
+  {
+    "id": 5,
+    "title": "AI游戏视频片头秘籍",
+    "description": "林梓阳：古风游戏AI片头低成本高质量创作方案",
+    "author": "林梓阳",
+    "industry": [
+      "游戏"
+    ],
+    "thumbnail": "images/cases/thumbs/c5.jpg",
+    "primaryVideo": "images/cases/videos/v5_1.mp4",
+    "videoWidth": 1920,
+    "videoHeight": 1080,
+    "allVideos": [
+      "images/cases/videos/v5_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：游戏 | 林梓阳\n\n古风游戏AI片头低成本高质量创作方案。方法一：图片转视频法；方法二：直接视频生成法（四要素框架：场景、角色、对话、补充）。"
+  },
+  {
+    "id": 6,
+    "title": "超吸睛营销AI视频新玩法",
+    "description": "梁文冠：天天爱消除猫咪剧情 | 游戏营销新玩法",
+    "author": "梁文冠",
+    "industry": [
+      "游戏"
+    ],
+    "thumbnail": "images/cases/thumbs/c6.jpg",
+    "primaryVideo": "images/cases/videos/v6_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v6_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：游戏 | 梁文冠\n\n天天爱消除猫咪剧情 | 游戏营销新玩法。场景设定 + 角色剧情 + Seedance 2.0 = 高效游戏营销视频。"
+  },
+  {
+    "id": 7,
+    "title": "AI赋能美妆广告：从高成本TVC到分钟级出片",
+    "description": "江金：让AI高效听懂\"美妆语言\"，减少返工",
+    "author": "江金",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c7.jpg",
+    "primaryVideo": "images/cases/videos/v7_1.mp4",
+    "videoWidth": 1080,
+    "videoHeight": 1920,
+    "allVideos": [
+      "images/cases/videos/v7_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：电商 | 江金\n\nAI赋能美妆广告：从高成本TVC到分钟级出片。三模块拆解让AI听懂\"美妆语言\"：画面场景、人物形象、产品质地。"
+  },
+  {
+    "id": 8,
+    "title": "家居建材类微剧情",
+    "description": "潘嘉军：构建人脸库，角色一致性不再愁",
+    "author": "潘嘉军",
+    "industry": [
+      "电商",
+      "家居建材"
+    ],
+    "thumbnail": "images/cases/thumbs/c8.jpg",
+    "primaryVideo": "images/cases/videos/v8_1.mp4",
+    "videoWidth": 1080,
+    "videoHeight": 1920,
+    "allVideos": [
+      "images/cases/videos/v8_1.mp4",
+      "images/cases/videos/v8_2.mp4",
+      "images/cases/videos/v8_3.mp4",
+      "images/cases/videos/v8_4.mp4",
+      "images/cases/videos/v8_5.mp4",
+      "images/cases/videos/v8_6.mp4",
+      "images/cases/videos/v8_7.mp4",
+      "images/cases/videos/v8_8.mp4",
+      "images/cases/videos/v8_9.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：家居建材 | 潘嘉军\n\n构建人脸库，角色一致性不再愁。智剪人脸库 + 固定脚本框架 + 超分/去字幕 = 可售卖的高质量 AI 微剧情。"
+  },
+  {
+    "id": 9,
+    "title": "3步生成\"AI城市画卷\"国风宣传大片",
+    "description": "谢文亮：中国城市画卷案例全拆解",
+    "author": "谢文亮",
+    "industry": [
+      "教育"
+    ],
+    "thumbnail": "images/cases/thumbs/c9.jpg",
+    "primaryVideo": "images/cases/videos/v9_1.mp4",
+    "videoWidth": 2560,
+    "videoHeight": 1440,
+    "allVideos": [
+      "images/cases/videos/v9_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：教育 | 谢文亮\n\n中国城市画卷·AI 视频生成案例。使用 Seedance 2.0 图生视频模式，首帧固定锁定卷轴主体形态，实现城市卷轴的丝滑动态效果。"
+  },
+  {
+    "id": 10,
+    "title": "AI电商短剧工作流",
+    "description": "陈娜：从剧本到成片，AI剧情工作流",
+    "author": "陈娜",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c10.jpg",
+    "primaryVideo": "images/cases/videos/v10_1.mp4",
+    "videoWidth": 1080,
+    "videoHeight": 1920,
+    "allVideos": [
+      "images/cases/videos/v10_1.mp4",
+      "images/cases/videos/v10_2.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：电商 | 陈娜\n\n从剧本到成片的AI剧情工作流。包含防脱男痛点短剧等实战案例。"
+  },
+  {
+    "id": 11,
+    "title": "高转化爆款AI视频实战方法论",
+    "description": "黄梓聪：如何用AI视频打造高转化投放素材",
+    "author": "黄梓聪",
+    "industry": [
+      "游戏"
+    ],
+    "thumbnail": "images/cases/thumbs/c11.jpg",
+    "primaryVideo": "images/cases/videos/v11_1.mp4",
+    "videoWidth": 1536,
+    "videoHeight": 2730,
+    "allVideos": [
+      "images/cases/videos/v11_1.mp4",
+      "images/cases/videos/v11_2.mp4",
+      "images/cases/videos/v11_3.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：游戏 | 黄梓聪\n\n如何用AI视频打造高转化投放素材。包含多个实际项目的完整操作步骤和提示词参考。"
+  },
+  {
+    "id": 12,
+    "title": "破解AI抽卡翻车，真人剧情广告AI视频赋能",
+    "description": "黄钰岚：还在为AI视频抽卡、乱码头疼？教你解决",
+    "author": "黄钰岚",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c12.jpg",
+    "primaryVideo": "images/cases/videos/v12_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v12_1.mp4",
+      "images/cases/videos/v12_2.mp4",
+      "images/cases/videos/v12_3.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "应用行业：电商 | 黄钰岚\n\n提高AI视频生成的精准度，减少抽卡乱码，视频制作周期从1天（24小时）大幅缩短至4小时，效率提升显著。工具：即梦"
+  },
+  {
+    "id": 13,
+    "title": "泰康保险AI微动视频实战",
+    "description": "王敏杰：泰康保险竖版AI微动视频，人像驱动赋能保险营销",
+    "author": "王敏杰",
+    "industry": [
+      "金融",
+      "保险"
+    ],
+    "thumbnail": "images/cases/thumbs/c13.jpg",
+    "primaryVideo": "images/cases/videos/v13_1.mp4",
+    "videoWidth": 1920,
+    "videoHeight": 1080,
+    "allVideos": [
+      "images/cases/videos/v13_1.mp4",
+      "images/cases/videos/v13_2.mp4",
+      "images/cases/videos/v13_3.mp4",
+      "images/cases/videos/v13_4.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/author_13.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：王敏杰 | 行业：金融保险\n\n泰康保险竖版AI微动视频系列，利用AI人像驱动技术，将保险顾问形象转化为动态视频，适用于短视频平台投放。\n\n工具：智影/智剪\n\n成果：4条竖版微动视频，覆盖多位保险顾问形象"
+  },
+  {
+    "id": 14,
+    "title": "教育行业AI视频创作",
+    "description": "李淑娟：教育场景AI视频实战应用",
+    "author": "李淑娟",
+    "industry": [
+      "教育"
+    ],
+    "thumbnail": "images/cases/thumbs/c14.jpg",
+    "primaryVideo": "images/cases/videos/v14_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v14_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/author_14.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：李淑娟 | 行业：教育\n\n教育行业AI视频创作实战，将教学内容转化为生动视频形式。\n\n工具：智影\n\n成果：1条教育场景AI视频"
+  },
+  {
+    "id": 15,
+    "title": "游戏福利AI视频制作",
+    "description": "赵梓莹：海奇互动游戏福利韩语AI视频",
+    "author": "赵梓莹",
+    "industry": [
+      "游戏"
+    ],
+    "thumbnail": "images/cases/thumbs/c15.jpg",
+    "primaryVideo": "images/cases/videos/v15_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v15_1.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：赵梓莹 | 行业：游戏\n\n海奇互动游戏福利视频，韩语配音AI生成，9:16竖版适配短视频平台。\n\n工具：智影/智剪\n\n成果：1条游戏福利AI视频"
+  },
+  {
+    "id": 16,
+    "title": "电商AI视频生成实战",
+    "description": "洪泽江：电商场景AI视频生成，Seedance驱动高质量输出",
+    "author": "洪泽江",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c16.jpg",
+    "primaryVideo": "images/cases/videos/v16_1.mp4",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "allVideos": [
+      "images/cases/videos/v16_1.mp4",
+      "images/cases/videos/v16_2.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/author_16.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：洪泽江 | 行业：电商\n\n电商场景AI视频生成实战，利用Seedance模型生成高质量电商推广视频。\n\n工具：智影（Seedance）\n\n成果：2条电商AI视频"
+  },
+  {
+    "id": 17,
+    "title": "跨境电商AI视频脚本制作",
+    "description": "宋世豪：ALA墨西哥等跨境电商AI视频脚本试做",
+    "author": "宋世豪",
+    "industry": [
+      "电商"
+    ],
+    "thumbnail": "images/cases/thumbs/c17.jpg",
+    "primaryVideo": "images/cases/videos/v17_1.mp4",
+    "videoWidth": 1080,
+    "videoHeight": 1920,
+    "allVideos": [
+      "images/cases/videos/v17_1.mp4",
+      "images/cases/videos/v17_2.mp4",
+      "images/cases/videos/v17_3.mp4",
+      "images/cases/videos/v17_4.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/preview_full.png"
+    ],
+    "prompts": [],
+    "mainText": "人物：宋世豪 | 行业：电商（跨境）\n\n跨境电商AI视频脚本制作实战，覆盖ALA墨西哥等海外市场，多案例多脚本试做。\n\n工具：智影/智剪\n\n成果：4条跨境电商AI视频"
+  },
+  {
+    "id": 18,
+    "title": "二轮车AI空境制作实战",
+    "description": "潘嘉军：二轮车项目AI空境视频，多场景批量生成",
+    "author": "潘嘉军",
+    "industry": [
+      "二轮车"
+    ],
+    "thumbnail": "images/cases/thumbs/c18.jpg",
+    "primaryVideo": "images/cases/videos/v18_1.mp4",
+    "videoWidth": 1080,
+    "videoHeight": 1906,
+    "allVideos": [
+      "images/cases/videos/v18_1.mp4",
+      "images/cases/videos/v18_2.mp4",
+      "images/cases/videos/v18_3.mp4",
+      "images/cases/videos/v18_4.mp4",
+      "images/cases/videos/v18_5.mp4",
+      "images/cases/videos/v18_6.mp4",
+      "images/cases/videos/v18_7.mp4",
+      "images/cases/videos/v18_8.mp4",
+      "images/cases/videos/v18_9.mp4"
+    ],
+    "allImages": [
+      "images/cases/thumbs/author_18.jpg"
+    ],
+    "prompts": [],
+    "mainText": "人物：潘嘉军 | 行业：二轮车\n\n二轮车项目AI空境制作，多场景批量生成常规与橙色系空境视频，适用于二轮车品牌投放。\n\n工具：智影/智图\n\n成果：9条二轮车AI空境视频"
+  }
+]; ──
+  function openCaseDetail(id) {
+    const c = caseData.find(c => c.id === id);
+    if (!c) return;
+
+    const modal = document.getElementById('caseModal');
+    const content = document.getElementById('caseModalContent');
+
+    // Build video section
+    let videoHtml = '';
+    if (c.allVideos.length > 0) {
+      videoHtml = '<div class="case-detail-section"><h4>🎬 案例视频</h4>';
+      c.allVideos.forEach((v, i) => {
+        videoHtml += '<div class="case-video-item"><div class="video-label">视频 ' + (i+1) + ' / ' + c.allVideos.length + '</div><video class="case-video-player" controls preload="auto" style="width:100%;max-height:80vh;"><source src="' + v + '" type="video/mp4">您的浏览器不支持视频播放。</video></div>';
+      });
+      videoHtml += '</div>';
+    }
+
+    // Build prompt section
+    let promptHtml = '';
+    if (c.prompts.length > 0) {
+      promptHtml = '<div class="case-detail-section"><h4>📝 提示词参考</h4>';
+      c.prompts.forEach(p => {
+        promptHtml += '<div class="case-prompt-item">' + escapeHtml(p) + '</div>';
+      });
+      promptHtml += '</div>';
+    }
+
+    // Build images section
+    let imageHtml = '';
+    if (c.allImages.length > 0) {
+      imageHtml = '<div class="case-detail-section"><h4>🖼️ 案例图片</h4><div class="case-image-grid">';
+      c.allImages.slice(0, 12).forEach(img => {
+        imageHtml += '<img src="' + img + '" loading="lazy" onclick="openLightbox(this.src)" onerror="this.style.display=\'none\'">';
+      });
+      imageHtml += '</div></div>';
+    }
+
+    // Build text content section
+    let textHtml = '';
+    if (c.mainText && c.mainText.length > 50) {
+      textHtml = '<div class="case-detail-section"><h4>📄 案例详情</h4><div class="case-text-content">' + escapeHtml(c.mainText) + '</div></div>';
+    }
+
+    // Build industry tags
+    const industryTags = c.industry.map(ind => '<span class="case-tag">' + ind + '</span>').join('');
+
+    content.innerHTML =
+      '<div class="case-detail-header">' +
+        '<h3>' + escapeHtml(c.title) + '</h3>' +
+        '<p class="case-detail-desc">' + escapeHtml(c.description) + '</p>' +
+        '<div class="case-detail-meta">' +
+          (c.author ? '<span class="case-author">@' + escapeHtml(c.author) + '</span>' : '') +
+          industryTags +
+          (c.allVideos.length > 0 ? '<span class="case-video-badge">🎬 ' + c.allVideos.length + '个视频</span>' : '') +
+          (c.prompts.length > 0 ? '<span class="case-prompt-badge">📝 ' + c.prompts.length + '条提示词</span>' : '') +
+        '</div>' +
+      '</div>' +
+      videoHtml + promptHtml + imageHtml + textHtml;
+
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // ── Close case detail modal ──
+  function closeCaseDetail(event) {
+    if (event && event.target !== event.currentTarget) return;
+    const modal = document.getElementById('caseModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    // Pause all videos
+    modal.querySelectorAll('video').forEach(v => v.pause());
+  }
+
+  // ── Filter cases ──
+  
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Highlight active nav link
+      document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.querySelector('.header-nav a[href="#' + id + '"]');
+      if (activeLink) activeLink.classList.add('active');
+    }
+  }
+
+  function filterCases(filter, btn) {
+    // Scroll to case section first
+    scrollToSection('case-works');
+    document.querySelectorAll('.case-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.case-gallery-card');
+    cards.forEach((card, i) => {
+      const c = caseData[i];
+      if (!c) return;
+
+      let show = false;
+      if (filter === 'all') {
+        show = true;
+      } else if (filter === 'video') {
+        show = c.allVideos.length > 0;
+      } else if (filter === 'prompt') {
+        show = c.prompts.length > 0;
+      } else {
+        show = c.industry.includes(filter);
+      }
+
+      card.style.display = show ? '' : 'none';
+    });
+  }
+
+  // ── Open lightbox for images ──
+  function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('show');
+  }
+
+  // ── Escape HTML ──
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+
+  // ── Close modal with Escape key ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCaseDetail();
+  });
+
+</script>
+
+</body>
+</html>
